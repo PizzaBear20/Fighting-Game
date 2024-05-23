@@ -88,12 +88,13 @@ class Character:
         return message
         
 # List of names
-names = [
-    "Chris", "Abby", "Tom", "Jake", "Leland", "Cassius"
-]
+names = []
 
 # List to store Character objects
 characters = {}
+
+#History list
+history = []
 
 # Loop through the names, create Character objects, set stats, and store in the list
 for name in names:
@@ -161,19 +162,22 @@ def oneVOne(character1,character2):
     #comparing points
     if character1Points > character2Points:
         print("Here are the fight results...")
-        displayStatsCall(character1Name)
-        displayStatsCall(character2Name)
         print(character1Name, " has won the fight")
+        history = f"{character1Name} has won the fight against {character2Name}"
+        messagebox.showinfo("Fight Results",history)
+        documentFight(history)
     elif character2Points > character1Points:
         print("Here are the fight results...")
-        displayStatsCall(character1Name)
-        displayStatsCall(character2Name)
         print(character2Name, " has won the fight")
+        history = f"{character2Name} has won the fight against {character1Name}"
+        messagebox.showinfo("Fight Results",history)
+        documentFight(history)
     else:
         print("Here are the fight results...")
-        displayStatsCall(character1Name)
-        displayStatsCall(character2Name)
         print("The fight has ended in a draw")
+        history = f"The fight between {character1Name} and {character2Name} ended in a draw"
+        messagebox.showinfo("Fight Results",history)
+        documentFight(history)
 
 def updateStats():
     statsText.config(state=tk.NORMAL)
@@ -181,6 +185,14 @@ def updateStats():
     for name, character in characters.items():
         statsText.insert(tk.END,character.displayStats() + "\n\n")
     statsText.config(state=tk.DISABLED)
+
+def documentFight(historyEvent):
+    history.append(historyEvent)
+    historyText.config(state=tk.NORMAL)
+    historyText.delete('1.0',tk.END)
+    for event in history:
+        historyText.insert(tk.END,event + "\n\n")
+    historyText.config(state=tk.DISABLED)
 
 def onTrainButtonClick():
     name = charNameEntry.get()
@@ -192,6 +204,21 @@ def onShowStatsButtonClick():
     name = charNameEntry.get()
     displayStatsCall(name)
     updateStats()
+
+def createCharacter(name):
+    character = Character(name)
+    character.stats()
+    characters[name] = character
+    updateStats()
+
+def onCreateCharacterClick():
+    name = createCharacterEntry.get()
+    createCharacter(name)
+
+def onFightButtonClick():
+    character1 = oneVOneEntry1.get()
+    character2 = oneVOneEntry2.get()
+    oneVOne(character1,character2)
 
 #GUI
 root = tk.Tk()
@@ -209,15 +236,46 @@ labelAttribute.grid(row=1,column=0,padx=5,pady=5)
 attributeEntry = tk.Entry(root)
 attributeEntry.grid(row=1,column=1,padx=5,pady=5)
 
+createCharacterLabel = tk.Label(root, text = "Create Character")
+createCharacterLabel.grid(row=3,column=0,padx=5,pady=5)
+
+createCharacterEntry = tk.Entry(root)
+createCharacterEntry.grid(row=3,column=1,padx=5,pady=5)
+
+oneVOneLabel = tk.Label(root, text="Hold a one vs one fight")
+oneVOneLabel.grid(row=0,column=3,padx=5,pady=5)
+
+oneVOneEntry1 = tk.Entry(root)
+oneVOneEntry1.grid(row=0,column=4,padx=5,pady=5)
+
+vsLabel = tk.Label(root, text="vs")
+vsLabel.grid(row=0,column=5)
+
+oneVOneEntry2 = tk.Entry(root)
+oneVOneEntry2.grid(row=0,column=6,padx=5,pady=5)
+
 showStatsButton = tk.Button(root, text = "Show Character Stats", command=onShowStatsButtonClick)
 showStatsButton.grid(row=0,column=2,padx=5,pady=5)
+
+fightButton = tk.Button(root, text="Simulate Fight", command=onFightButtonClick)
+fightButton.grid(row=0,column=7,padx=5,pady=5)
 
 trainButton = tk.Button(root, text = "Train", command=onTrainButtonClick)
 trainButton.grid(row=1,column=2,padx=5,pady=5)
 
+createCharacterButton = tk.Button(root, text = "Create", command=onCreateCharacterClick)
+createCharacterButton.grid(row=3,column=2,padx=5,pady=5)
+
 statsText = tk.Text(root, width=40, height=15)
-statsText.grid(row=2,column=0,columnspan=2,padx=5,pady=5)
+statsText.grid(row=4,column=0,columnspan=2,padx=5,pady=5)
 statsText.config(state=tk.DISABLED)
+
+historyText = tk.Text(root,width=40,height=15)
+historyText.grid(row=1,column=4,columnspan=3,padx=5,pady=5)
+historyText.config(state=tk.DISABLED)
+
+spaceLabel = tk.Label(root)
+spaceLabel.grid(row=2,column=1)
 
 updateStats()
 
