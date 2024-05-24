@@ -30,17 +30,6 @@ class Character:
             count += 1  # Increment count to avoid infinite loop
 
     def displayStats(self):
-        # Printing the results
-        print()
-        print("------------------------------------")
-        print("Name: ", self.name)
-        print("Health: ", self.health)
-        print("Strength: ", self.strength)
-        print("Speed: ", self.speed)
-        print("Intelligence: ", self.intelligence)
-        print("Battle IQ: ", self.battleIQ)
-        print("------------------------------------")
-        print()
         return (
             f"Name: {self.name}\n"
             f"Health: {self.health}\n"
@@ -114,7 +103,6 @@ def trainCharacterCall(name, attribute):
         messagebox.showinfo("Training Results", resultMessage)
         updateStats
     else:
-        print("Character '", name, "' not found")
         messagebox.showerror("Error", f"Character '{name}' not found")
 
 # display character stats call
@@ -123,7 +111,6 @@ def displayStatsCall(name):
         stats = characters[name].displayStats()
         messagebox.showinfo("Character Stats", stats)
     else:
-        print("Character '", name, "' not found")
         messagebox.showerror("Error", f"Character '{name}' not found")
 
 #1v1 character fight
@@ -161,23 +148,17 @@ def oneVOne(character1,character2):
         character2Points += 1
     #comparing points
     if character1Points > character2Points:
-        print("Here are the fight results...")
-        print(character1Name, " has won the fight")
-        history = f"{character1Name} has won the fight against {character2Name}"
-        messagebox.showinfo("Fight Results",history)
-        documentFight(history)
+        historyEvent = f"{character1Name} has won the fight against {character2Name}"
+        messagebox.showinfo("Fight Results",historyEvent)
+        documentFight(historyEvent)
     elif character2Points > character1Points:
-        print("Here are the fight results...")
-        print(character2Name, " has won the fight")
-        history = f"{character2Name} has won the fight against {character1Name}"
-        messagebox.showinfo("Fight Results",history)
-        documentFight(history)
+        historyEvent = f"{character2Name} has won the fight against {character1Name}"
+        messagebox.showinfo("Fight Results",historyEvent)
+        documentFight(historyEvent)
     else:
-        print("Here are the fight results...")
-        print("The fight has ended in a draw")
-        history = f"The fight between {character1Name} and {character2Name} ended in a draw"
-        messagebox.showinfo("Fight Results",history)
-        documentFight(history)
+        historyEvent = f"The fight between {character1Name} and {character2Name} ended in a draw"
+        messagebox.showinfo("Fight Results",historyEvent)
+        documentFight(historyEvent)
 
 def updateStats():
     statsText.config(state=tk.NORMAL)
@@ -270,8 +251,8 @@ statsText = tk.Text(root, width=40, height=15)
 statsText.grid(row=4,column=0,columnspan=2,padx=5,pady=5)
 statsText.config(state=tk.DISABLED)
 
-historyText = tk.Text(root,width=40,height=15)
-historyText.grid(row=1,column=4,columnspan=3,padx=5,pady=5)
+historyText = tk.Text(root,width=40,height=24)
+historyText.grid(row=1,column=4,rowspan=4,columnspan=3,padx=5,pady=5)
 historyText.config(state=tk.DISABLED)
 
 spaceLabel = tk.Label(root)
@@ -279,58 +260,5 @@ spaceLabel.grid(row=2,column=1)
 
 updateStats()
 
-root.mainloop
+root.mainloop()
 
-def main():
-    while True:
-        menu = input("Type menu to access the menu: ")
-    
-        if menu:
-
-            print()
-            print()
-            print()
-            print()
-            print()
-            print()
-            print()
-            print()
-            print()
-            print()
-            print()
-            print()
-            print()
-            print()
-            print()
-            print()
-            print("****************************")
-            print("1. Display Stats")
-            print("2. Display all stats")
-            print("3. Train Character")
-            print("4. Hold 1v1 Battle")
-            print("5. Exit")
-            try:
-                choice = int(input("Enter your choice: "))
-            except ValueError:
-                print("Invalid Input. Please enter a number")
-                continue #restarts the loop
-
-            if choice == 1:
-                name = input("Enter character name: ")
-                displayStatsCall(name)
-            elif choice == 2:
-                displayAllStats()
-            elif choice == 3:
-                name = input("Enter character name: ")
-                attribute = input("Enter attribute to train or write randon (must be all lowercase)")
-                trainCharacterCall(name,attribute)
-            elif choice == 4:
-                characterOne = input("Enter the name of the first fighter: ")
-                characterTwo = input("Enter the name of the second fighter: ")
-                oneVOne(characterOne,characterTwo)
-            elif choice == 5:
-                break
-            else:
-                print("Invalid choice. Please try again")
-if __name__ == "__main__":
-    main()
