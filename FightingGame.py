@@ -79,6 +79,9 @@ class Character:
 # List of names
 names = []
 
+# Dictionary to store power levels
+powerLevels = {}
+
 # List to store Character objects
 characters = {}
 
@@ -153,12 +156,25 @@ def oneVOne(character1,character2):
         messagebox.showinfo("Fight Results",historyEvent)
         documentFight(historyEvent)
 
+def updatePowerLevels():
+    powerLevelsText.config(state=tk.NORMAL)
+    powerLevelsText.delete('1.0', tk.END)
+    sortedPowerLevels = sorted(powerLevels.items(), key=lambda item: item[1], reverse=True)#need to research how this works
+    rank = 0
+    for name, powerLevel in sortedPowerLevels:
+        rank += 1
+        powerLevelsText.insert(tk.END, f"{rank}. {name}: {powerLevel}\n")
+    powerLevelsText.config(state=tk.DISABLED)    
+
 def updateStats():
     statsText.config(state=tk.NORMAL)
     statsText.delete('1.0',tk.END)
     for name, character in characters.items():
         statsText.insert(tk.END,character.displayStats() + "\n\n")
+        powerLevel = character.health + character.strength + character.speed + character.intelligence + character.battleIQ
+        powerLevels[name] = powerLevel
     statsText.config(state=tk.DISABLED)
+    updatePowerLevels()
 
 def documentFight(historyEvent):
     history.append(historyEvent)
@@ -225,6 +241,9 @@ oneVOneEntry1.grid(row=0,column=4,padx=5,pady=5)
 vsLabel = tk.Label(root, text="vs")
 vsLabel.grid(row=0,column=5)
 
+powerLevelLabel = tk.Label(root, text="Power Level Rankings")
+powerLevelLabel.grid(row=5,column=0,padx=5,pady=5)
+
 oneVOneEntry2 = tk.Entry(root)
 oneVOneEntry2.grid(row=0,column=6,padx=5,pady=5)
 
@@ -247,6 +266,10 @@ statsText.config(state=tk.DISABLED)
 historyText = tk.Text(root,width=40,height=24)
 historyText.grid(row=1,column=4,rowspan=4,columnspan=3,padx=5,pady=5)
 historyText.config(state=tk.DISABLED)
+
+powerLevelsText = tk.Text(root,width=40,height=15)
+powerLevelsText.grid(row=6,column=0,columnspan=2,padx=5,pady=5)
+powerLevelsText.config(state=tk.DISABLED)
 
 spaceLabel = tk.Label(root)
 spaceLabel.grid(row=2,column=1)
