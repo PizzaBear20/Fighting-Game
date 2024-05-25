@@ -91,11 +91,6 @@ for name in names:
     character.stats()
     characters[name] = character
 
-# Display stats for each character
-def displayAllStats():
-    for name, character in characters.items():
-        character.displayStats()
-
 # train character call. attribute must be all lowercase or random
 def trainCharacterCall(name, attribute):
     if name in characters:
@@ -119,39 +114,37 @@ def oneVOne(character1,character2):
     character2Name = character2
     character1 = characters[character1]
     character2 = characters[character2]
-    character1Points = 0
-    character2Points = 0
-    #Health
-    if character1.health > character2.health:
-        character1Points += 1
-    elif character2.health > character1.health:
-        character2Points += 1
-    #Strength
-    if character1.strength > character2.strength:
-        character1Points += 1
-    elif character2.strength > character1.strength:
-        character2Points += 1
-    #Speed
-    if character1.speed > character2.speed:
-        character1Points += 1
-    elif character2.speed > character1.speed:
-        character2Points += 1
-    #Intelligence
-    if character1.intelligence > character2.intelligence:
-        character1Points += 1
-    elif character2.intelligence > character1.intelligence:
-        character2Points += 1
-    #Battle IQ
-    if character1.battleIQ > character2.battleIQ:
-        character1Points += 1
-    elif character2.battleIQ > character1.battleIQ:
-        character2Points += 1
+    character1Health = character1.health
+    character2Health = character2.health
+    character1Speed = character1.speed
+    character2Speed = character2.speed
+    character1BattleIQ = character1.battleIQ
+    character2BattleIQ = character2.battleIQ
+    character1AttackStength = (0.25 * float(character1BattleIQ)) + float(character1.strength)
+    character2AttackStength = (0.25 * float(character2BattleIQ)) + float(character2.strength)
+    number = character1Speed + character2Speed
+    
+    maxIterations = 1000
+    iteration = 0
+    fighting = True
+    while fighting and iteration < maxIterations:
+        attackChance1 = random.randrange(1,number+1)
+        attackChance2 = random.randrange(1,number+1)
+        if character1Health == 0 or character2Health == 0:
+            fighting = False
+        else:
+            if attackChance1 <= character1Speed:
+                character2Health -= character1AttackStength
+            if attackChance2 > character1Speed:
+                character1Health -= character2AttackStength
+        iteration += 1
+
     #comparing points
-    if character1Points > character2Points:
+    if character1Health > character2Health:
         historyEvent = f"{character1Name} has won the fight against {character2Name}"
         messagebox.showinfo("Fight Results",historyEvent)
         documentFight(historyEvent)
-    elif character2Points > character1Points:
+    elif character2Health > character1Health:
         historyEvent = f"{character2Name} has won the fight against {character1Name}"
         messagebox.showinfo("Fight Results",historyEvent)
         documentFight(historyEvent)
