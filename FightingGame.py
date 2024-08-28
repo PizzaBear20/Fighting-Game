@@ -181,6 +181,11 @@ def trainCharacterCall(name, attribute):
     else:
         messagebox.showerror("Error", f"Character '{name}' not found")
 
+def trainAllCharactersCall(attribute):
+    for character in characters.values():   
+        character.train(attribute)
+    updateStats()
+
 # display character stats call
 def displayStatsCall(name):
     if name in characters:
@@ -317,6 +322,14 @@ def onFightButtonClick():
     character2 = oneVOneEntry2.get()
     oneVOne(character1,character2)
 
+def trainAllCharacters():
+    times = int(trainAllEntry1.get())
+    count = 1
+    while count <= times:
+        attribute = trainAllEntry2.get()
+        trainAllCharactersCall(attribute)
+        count += 1
+
 #GUI
 root = tk.Tk()
 root.title("Fighting Game")
@@ -381,6 +394,20 @@ powerLevelsText.config(state=tk.DISABLED)
 spaceLabel = tk.Label(root)
 spaceLabel.grid(row=2,column=1)
 
+trainAllLabel1 = tk.Label(root, text="Train all characters")
+trainAllLabel1.grid(row=7,column=0,padx=5,pady=5)
+
+trainAllEntry1 = tk.Entry(root)
+trainAllEntry1.grid(row=7,column=1,padx=5,pady=5)
+
+trainAllLabel2 = tk.Label(root,text="times for")
+trainAllLabel2.grid(row=7,column=2,padx=5,pady=5)
+
+trainAllEntry2 = tk.Entry(root)
+trainAllEntry2.grid(row=7,column=3,padx=5,pady=5)
+
+trainAllButton = tk.Button(root,text="Train All", command=trainAllCharacters)
+trainAllButton.grid(row=7,column=4,padx=5,pady=5)
 updateStats()
 
 root.mainloop()
